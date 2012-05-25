@@ -1,0 +1,31 @@
+    <form class="well form-horizontal" action="/actividades/editar/{{actividad.id}}" method="POST" id="frm_editar_act">
+       {% csrf_token %}
+       <table>
+           <tr>
+               <td><label for="actividad">Actividad:</label>{{form_agregar_act.actividad}}</td>
+               <td><label for="proyecto">Proyecto:</label>{{form_agregar_act.proyecto}}</td>
+           </tr> 
+           <tr>
+               <td><label for="hora">Hora:</label>{{form_agregar_act.hora}}</td>
+               <td><label for="minutos">Minutos:</label>{{form_agregar_act.minutos}}</td>
+           </tr> 
+           <tr>
+               <td><label for="duracion">Duración:</label>{{form_agregar_act.duracion}}</td>
+               <td><label for="lugar">Lugar:</label>{{form_agregar_act.lugar}}</td>
+           </tr> 
+           <tr>
+               <td colspan="2"><label for="objetivos">Objetivos:</label>{{form_agregar_act.objetivos}}</td>
+           </tr> 
+           <tr>
+               <td colspan="2"><label for="recursos">Recursos:</label>
+                   <div class="form-inline">
+                       {{ recursos_formset.management_form }}
+                       {{ recursos_formset.hidden }}
+                       {% for f in recursos_formset %}
+                       <p>{{f.id}} {{f.cant}} {{f.recurso}}</p></br>
+                       {% endfor %}
+                   </div>
+               </td>
+           </tr> 
+       </table>
+   </form>

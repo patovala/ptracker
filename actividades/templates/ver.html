@@ -1,0 +1,44 @@
+{% if actividad.proyecto %} <span class="label label-inverse">{{ actividad.proyecto.nombre }} </span> {% endif %}
+<h1> {{ actividad.actividad }} <a href="/actividades/editar/{{actividad.id}}" class="btn btn-warning btn-small" id="btn_ver_act_editar"><i class="icon-edit"></i> Editar</a></h1> 
+<div class="alert alert-block alert-error fade in" style="display:none">
+        <button data-dismiss="alert" class="close">×</button>
+        <h4 class="alert-heading">Cuidado! Está a punto de eliminar una actividad!</h4>
+        <p>Al eliminar la actividad se eliminará sus datos relacionados</p>
+        <p>
+        <a href="/actividades/eliminar/{{actividad.id}}" class="btn btn-danger" id="btn_ver_act_confirm">Eliminar</a> 
+        <a href="#" class="btn" id="btn_ver_act_cancelar">No eliminar</a>
+        </p>
+</div>
+<div class="well">
+    <div class="row">
+        
+        <span class="span6">{{ actividad.objetivos }}</span>
+        <div class="span3">
+            <dl class="dl-horizontal">
+                <dt>objetivos:</dt>
+                <dd> {{ actividad.objetivos }} </dd>
+            </dl>
+        </div>
+        <div class="span3">
+            <dl class="dl-horizontal">
+                <dt>fecha:</dt> 
+                <dd>{{ actividad.fecha_hora}}</dd> 
+                <dt>duracion:</dt> 
+                <dd>{{ actividad.duracion}} min</dd> 
+            </dl>
+        </div>
+        <span class="span6"><h4>Recursos:</h4>
+            <table class="table">
+                <tr><th>#</th><th>unidad</th><th>recurso</th><th>costo</th></tr>
+                {% for r in actividad.recursos.all %}
+                <tr>
+                    <td>{{r.cant}}</td>
+                    <td>{{r.recurso.unidad}}</td>
+                    <td>{{r.recurso.recurso}}</td>
+                    <td>{{r.recurso.costo}}</td>
+                </tr>
+                {% endfor  %}
+            </table>
+        </span>
+    </div>
+</div>

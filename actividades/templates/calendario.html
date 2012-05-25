@@ -1,0 +1,220 @@
+{% extends 'master.html' %}
+
+{% block css %}
+    .table-bordered tr td {
+        background-color: lightblue;
+        border: 2px solid white;
+        margin: 1px;
+        padding: 1px;
+    }
+
+    table.table-bordered {
+        width: 94%;
+    }
+
+    .bar {
+        position: absolute;
+    }
+
+    td.mon.hoy {
+        border: 1px dashed RoyalBlue;
+    }
+
+{% endblock %}
+
+{% block contenido %}
+<div class="row">
+    <div class="span12">
+        <h1> Calendario de actividades:</h1> 
+        <h2> {{  empleado.user.first_name }} {{ empleado.user.last_name }}</h2>
+        <span class="label label-info">{{ empleado.user.email }}</span> <span class="badge">{{ empleado.get_actividades|length }}</span> actividades
+        <hr/>
+        <div></div>
+        <div class="row well">
+            <div class="span12">
+                {{ calendario }}      
+            </div>
+        </div>
+    </div>
+</div>
+
+{# un modal para presentar la actividad/tarea #}
+<div class="modal hide fade" id="modal_ver">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>Actividad</h3>
+    </div>
+    <div class="modal-body">
+        <div id="contenido"></div>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn"  id="btn_ver_act_cerrar">Cancelar</a>
+        <a href="#" class="btn btn-danger" id="btn_ver_act_eliminar">Eliminar</a>
+    </div>
+</div>
+
+{# un modal para agregar la actividad/tarea #}
+<div class="modal hide fade" id="form_agregar_act">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>Agregar Actividad</h3>
+    </div>
+    <div class="modal-body">
+         <form class="well form-horizontal" action="/actividades/crear" method="POST" id="frm_crear_act">
+            {% csrf_token %}
+            <table>
+                <tr>
+                    <td><label for="actividad">Actividad:</label>{{form_agregar_act.actividad}}</td>
+                    <td><label for="proyecto">Proyecto:</label>{{form_agregar_act.proyecto}}</td>
+                </tr> 
+                <tr>
+                    <td><label for="hora">Hora:</label>{{form_agregar_act.hora}}</td>
+                    <td><label for="minutos">Minutos:</label>{{form_agregar_act.minutos}}</td>
+                </tr> 
+                <tr>
+                    <td><label for="duracion">Duración:</label>{{form_agregar_act.duracion}}</td>
+                    <td><label for="lugar">Lugar:</label>{{form_agregar_act.lugar}}</td>
+                </tr> 
+                <tr>
+                    <td colspan="2"><label for="objetivos">Objetivos:</label>{{form_agregar_act.objetivos}}</td>
+                </tr> 
+                <tr>
+                    <td colspan="2"><label for="recursos">Recursos:</label>
+                        <div class="form-inline">
+                            {{ recursos_formset.management_form }}
+                            {% for f in recursos_formset %}
+                            <p>{{f.cant}} {{f.recurso}}</p></br>
+                            {% endfor %}
+                        </div>
+                    </td>
+                </tr> 
+            </table>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" id="btn_agregar_act_cerrar">Cerrar</a>
+        <a href="#" class="btn btn-primary" id="btn_agregar_act_crear">Crear Actividad</a>
+    </div>
+</div>
+
+{# un modal para editar la actividad/tarea #}
+<div class="modal hide fade" id="form_editar_act">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>Editar Actividad</h3>
+    </div>
+    <div class="modal-body" id="actividad_edit">
+    </div> 
+
+    <div class="modal-footer">
+        <a href="#" class="btn" id="btn_editar_act_cerrar">Cerrar</a>
+        <a href="#" class="btn btn-primary" id="btn_editar_act_doeditar">Editar Actividad</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+
+<script src="{{ MEDIA_URL}}js/jquery.validate.js"></script> 
+<script src="{{ MEDIA_URL}}js/bootstrap-alert.js"></script> 
+<script type="text/javascript">
+    $(document).ready(function(){
+            // ver las actividades en un modal 
+        $("a.veract").click(function(event){
+            event.preventDefault();
+            var url = event.target.href;
+            $.get(url, function(data) {
+                 $('#contenido').html(data);
+
+                 });
+            $("#modal_ver").modal('toggle');
+            }
+        );
+
+        // crear popovers para ver el menu de agregar actividad            
+        $("div.addact").hover(function(event){
+                $(this).children(".bar").show()
+            },
+            function(event){
+                $(this).children(".bar").hide()
+            }
+        );
+
+        // formulario para agregar actividades
+        $("a.frmaa").click(function(event){
+            event.preventDefault();
+            var url = event.target.href;
+            $("#frm_crear_act")[0].action = url
+            $("#form_agregar_act").modal('show');
+        });
+
+        $("#btn_agregar_act_cerrar").click(function(event){
+            $("#form_agregar_act").modal('hide');
+            $("#frm_crear_act").validate({
+                errorClass: "alert error-alert",
+                message: "Este campo es obligatorio",
+                }).resetForm();
+        });
+
+        $("#btn_ver_act_cerrar").click(function(event){
+            $("#modal_ver").modal('hide');
+        });
+
+        $("#btn_ver_act_eliminar").click(function(event){
+            $(".alert").show();
+        });
+
+        $("#btn_ver_act_cancelar").live('click',function(event){
+            $(".alert").hide();
+        });
+
+        $("#btn_editar_act_cerrar").click(function(event){
+            $("#form_editar_act").modal('hide');
+        });
+
+        // editar la actividad que se esta viendo
+        $("#btn_ver_act_editar").live('click',function(event){
+            $("#modal_ver").modal('hide');
+            event.preventDefault();
+            var url = event.target.href;
+            $.get(url, function(data) {
+                 $('#actividad_edit').html(data);
+
+            });
+            $("#frm_crear_act")[0].action = url
+            $("#form_editar_act").modal('show');
+        });
+
+        /* mmm.. I don't know why this is required twise */
+        $("#frm_crear_act").validate({
+                errorClass: "alert error-alert",
+                messages: {
+                        actividad: "Este campo es obligatorio",
+                        objetivos: "Se requiere poner objetivos para la actividad",
+                    },
+                });
+
+        $("#frm_editar_act").validate({
+                errorClass: "alert error-alert",
+                messages: {
+                        actividad: "Este campo es obligatorio",
+                        objetivos: "Se requiere poner objetivos para la actividad",
+                    },
+                });
+
+        $("#btn_agregar_act_crear").click(function(){
+            if($("#frm_crear_act").valid()){
+                $("#frm_crear_act").submit();
+            }
+        });
+
+        $("#btn_editar_act_doeditar").click(function(){
+            if($("#frm_editar_act").valid()){
+                $("#frm_editar_act").submit();
+            }
+        });
+
+ });
+</script>
+{% endblock %}
+

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>ptrack - Actividades</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Patricio Valarezo (c) patovala@pupilabox.net.ec">
+
+    <!-- Le styles -->
+    <link href="{{ MEDIA_URL }}css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+
+      {% block css %}
+      {# en este bloque poner cualquier css particular #}
+      {% endblock %}
+    </style>
+    <link href="{{ MEDIA_URL }}css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="http://twitter.github.com/bootstrap/assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://twitter.github.com/bootstrap/assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://twitter.github.com/bootstrap/assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="http://twitter.github.com/bootstrap/assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">Matriz de Proyectos</a>
+          <div class="nav-collapse">
+            <ul class="nav">
+                <li><a href="{{ ROOT_URL }}/actividades/calendario">calendario</a></li>
+                <li><a href="#actividades">mis actividades</a></li>
+                <li><a href="/admin/">admin</a></li>
+                <li><a href="#about">acerca de</a></li>
+                <li><a href=""></a></li>
+                <li><a href="{{ ROOT_URL }}/logout">salir</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container">
+      {% block mensajes %}
+      {# la idea es ir poniendo mensajes aqui tipo flash #}
+        {% if messages %}
+        <div class="row">
+          <div class="span8 offset2">
+          <div class="messages">
+              {% for message in messages %}
+              <div {% if message.tags %} class="alert alert-{{message.tags|lower}}"{% endif %}>{{ message }}</div>
+              {% endfor %}
+          </div>
+          </div>
+        </div>
+        {% endif %}
+      {% endblock %}
+      {% block contenido %}
+
+      <!-- Main hero unit for a primary marketing message or call to action -->
+      <div class="hero-unit">
+        <h1>Matriz de Apoyo a la Planificación</h1>
+        <p>planificador y documentador de actividades</p>
+        <p><a class="btn btn-primary btn-large">acerca de »</a></p>
+      </div>
+
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="span4">
+          <h2>Métricas</h2>
+           <p>Aquí van a ir las métricas de trabajo efectivo</p>
+          <p><a class="btn" href="#">Ver detalles »</a></p>
+        </div>
+        <div class="span4">
+          <h2>Proyectos</h2>
+           <p>Proyectos que están siendo manejados usando esta herramienta. </p>
+          <p><a class="btn" href="#">Ver más »</a></p>
+       </div>
+        <div class="span4">
+          <h2>Estadísticas</h2>
+          <p>Estadísticas de trabajo</p>
+          <p><a class="btn" href="#">Ver más »</a></p>
+        </div>
+      </div>
+
+      <hr>
+      
+      {% endblock %}
+
+      {% block footer %}
+      <footer>
+      <p>© gpl.gob.ec </p>
+      </footer>
+      {% endblock %}
+
+    </div> <!-- /container -->
+    <!-- el javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="{{ MEDIA_URL}}js/jquery.min.js"></script>
+    <script src="{{ MEDIA_URL}}js/bootstrap.js"></script> 
+    <script type="text/javascript">
+        $(function() {
+            // esconder automáticamente al message despues de 5 segundos
+            $('.messages').delay(3000).fadeOut('slow');
+        });
+    </script>
+    {% block js %}
+      {# en este bloque poner cualquier js particular #}
+    {% endblock %}
+    <!--
+    <script src="{{ MEDIA_URL}}js/bootstrap-transition.js"></script>
+    <script src="{{ MEDIA_URL}}js/bootstrap-alert.js"></script>
+    <script src="{{ MEDIA_URL}}js/bootstrap-modal.js"></script>
+    <script src="{{ MEDIA_URL}}js/bootstrap-dropdown.js"></script>
+    <script src="{{ MEDIA_URL}}js/bootstrap-scrollspy.js"></script>
+    <script src="{{ MEDIA_URL}}js/bootstrap-tab.js"></script>
+    <script src="{{ MEDIA_URL}}js/bootstrap-popover.js"></script>
+    <script src="{{ MEDIA_URL}}js/bootstrap-button.js"></script>
+    <script src="{{ MEDIA_URL}}js/bootstrap-collapse.js"></script>
+    <script src="{{ MEDIA_URL}}js/bootstrap-carousel.js"></script>
+    <script src="{{ MEDIA_URL}}js/bootstrap-typeahead.js"></script>
+    -->
+</body></html>

@@ -1,0 +1,28 @@
+{% extends 'master.html' %}
+
+{% block css %}
+{% endblock %}
+
+{% block contenido %}
+<div class="row">
+    <div class="span6 offset3">
+        {% if form.errors %}
+        <span class="alert error-alert">El usuario o clave son incorrectos. Por favor intente otra vez</span>
+        {% endif %}
+        {% load url from future %}
+        <form method="post" action="{% url 'django.contrib.auth.views.login'%}" class="well form-inline">
+            {% csrf_token %}
+            <input type="text" class="input-small" placeholder="usuario" name="username">
+            <input type="password" class="input-small" placeholder="password" name="password">
+            <label class="checkbox">
+                <input type="checkbox"> Recordarme 
+            </label>
+            <button type="submit" class="btn">Ingresar</button>
+            <input type="hidden" name="next" value="{{ next }}" />
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

@@ -1,0 +1,168 @@
+- fields: {domain: example.com, name: example.com}
+  model: sites.site
+  pk: 1
+- fields: {costo: '0.01', recurso: impresora, unidad: h}
+  model: actividades.recurso
+  pk: 1
+- fields: {costo: '0.01', recurso: computador, unidad: h}
+  model: actividades.recurso
+  pk: 2
+- fields: {costo: '0.01', recurso: papel bond (hoja), unidad: u}
+  model: actividades.recurso
+  pk: 3
+- fields: {empleado: 1, estado: ejecucion, fecha_fin: 2012-05-26, fecha_inicio: 2012-05-01,
+    nombre: "Gesti\xF3n de Asignaci\xF3n de Custodio", porcentaje: 20}
+  model: actividades.proyecto
+  pk: 1
+- fields: {departamento: CIT, url: '', user: 2}
+  model: actividades.empleado
+  pk: 1
+- fields: {codename: add_actividad, content_type: 11, name: Can add actividad}
+  model: auth.permission
+  pk: 31
+- fields: {codename: change_actividad, content_type: 11, name: Can change actividad}
+  model: auth.permission
+  pk: 32
+- fields: {codename: delete_actividad, content_type: 11, name: Can delete actividad}
+  model: auth.permission
+  pk: 33
+- fields: {codename: add_empleado, content_type: 13, name: Can add empleado}
+  model: auth.permission
+  pk: 37
+- fields: {codename: change_empleado, content_type: 13, name: Can change empleado}
+  model: auth.permission
+  pk: 38
+- fields: {codename: delete_empleado, content_type: 13, name: Can delete empleado}
+  model: auth.permission
+  pk: 39
+- fields: {codename: add_lugar, content_type: 9, name: Can add lugar}
+  model: auth.permission
+  pk: 25
+- fields: {codename: change_lugar, content_type: 9, name: Can change lugar}
+  model: auth.permission
+  pk: 26
+- fields: {codename: delete_lugar, content_type: 9, name: Can delete lugar}
+  model: auth.permission
+  pk: 27
+- fields: {codename: add_proyecto, content_type: 12, name: Can add proyecto}
+  model: auth.permission
+  pk: 34
+- fields: {codename: change_proyecto, content_type: 12, name: Can change proyecto}
+  model: auth.permission
+  pk: 35
+- fields: {codename: delete_proyecto, content_type: 12, name: Can delete proyecto}
+  model: auth.permission
+  pk: 36
+- fields: {codename: add_recurso, content_type: 10, name: Can add recurso}
+  model: auth.permission
+  pk: 28
+- fields: {codename: change_recurso, content_type: 10, name: Can change recurso}
+  model: auth.permission
+  pk: 29
+- fields: {codename: delete_recurso, content_type: 10, name: Can delete recurso}
+  model: auth.permission
+  pk: 30
+- fields: {codename: add_logentry, content_type: 8, name: Can add log entry}
+  model: auth.permission
+  pk: 22
+- fields: {codename: change_logentry, content_type: 8, name: Can change log entry}
+  model: auth.permission
+  pk: 23
+- fields: {codename: delete_logentry, content_type: 8, name: Can delete log entry}
+  model: auth.permission
+  pk: 24
+- fields: {codename: add_group, content_type: 2, name: Can add group}
+  model: auth.permission
+  pk: 4
+- fields: {codename: change_group, content_type: 2, name: Can change group}
+  model: auth.permission
+  pk: 5
+- fields: {codename: delete_group, content_type: 2, name: Can delete group}
+  model: auth.permission
+  pk: 6
+- fields: {codename: add_message, content_type: 4, name: Can add message}
+  model: auth.permission
+  pk: 10
+- fields: {codename: change_message, content_type: 4, name: Can change message}
+  model: auth.permission
+  pk: 11
+- fields: {codename: delete_message, content_type: 4, name: Can delete message}
+  model: auth.permission
+  pk: 12
+- fields: {codename: add_permission, content_type: 1, name: Can add permission}
+  model: auth.permission
+  pk: 1
+- fields: {codename: change_permission, content_type: 1, name: Can change permission}
+  model: auth.permission
+  pk: 2
+- fields: {codename: delete_permission, content_type: 1, name: Can delete permission}
+  model: auth.permission
+  pk: 3
+- fields: {codename: add_user, content_type: 3, name: Can add user}
+  model: auth.permission
+  pk: 7
+- fields: {codename: change_user, content_type: 3, name: Can change user}
+  model: auth.permission
+  pk: 8
+- fields: {codename: delete_user, content_type: 3, name: Can delete user}
+  model: auth.permission
+  pk: 9
+- fields: {codename: add_contenttype, content_type: 5, name: Can add content type}
+  model: auth.permission
+  pk: 13
+- fields: {codename: change_contenttype, content_type: 5, name: Can change content
+      type}
+  model: auth.permission
+  pk: 14
+- fields: {codename: delete_contenttype, content_type: 5, name: Can delete content
+      type}
+  model: auth.permission
+  pk: 15
+- fields: {codename: add_session, content_type: 6, name: Can add session}
+  model: auth.permission
+  pk: 16
+- fields: {codename: change_session, content_type: 6, name: Can change session}
+  model: auth.permission
+  pk: 17
+- fields: {codename: delete_session, content_type: 6, name: Can delete session}
+  model: auth.permission
+  pk: 18
+- fields: {codename: add_site, content_type: 7, name: Can add site}
+  model: auth.permission
+  pk: 19
+- fields: {codename: change_site, content_type: 7, name: Can change site}
+  model: auth.permission
+  pk: 20
+- fields: {codename: delete_site, content_type: 7, name: Can delete site}
+  model: auth.permission
+  pk: 21
+- fields:
+    date_joined: 2012-05-14 11:13:01.793102
+    email: admin@admin.com
+    first_name: ''
+    groups: []
+    is_active: true
+    is_staff: true
+    is_superuser: true
+    last_login: 2012-05-14 13:05:42.329568
+    last_name: ''
+    password: sha1$1f37a$379631c0a4083a25f2c261782609b5b3b2c61b3e
+    user_permissions: []
+    username: admin
+  model: auth.user
+  pk: 1
+- fields:
+    date_joined: 2012-05-14 11:16:09
+    email: patovala@pupilabox.net.ec
+    first_name: Patricio
+    groups: []
+    is_active: true
+    is_staff: false
+    is_superuser: false
+    last_login: 2012-05-14 11:16:09
+    last_name: Valarezo
+    password: sha1$ec565$8edee60bd6bb9f4cf14c48dadebabf36d091483e
+    user_permissions: []
+    username: patovala
+  model: auth.user
+  pk: 2
