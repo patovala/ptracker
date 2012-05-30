@@ -35,8 +35,14 @@
                 {{ calendario }}      
             </div>
         </div>
+        <div class="row">
+            <div class="span1"><a class="btn btn-info" href="/actividades/calendario/{{prev_link.0}}/{{prev_link.1}}"><i class="icon-arrow-left"></i>{{prev_link.2}}</a></div>
+            <div class="span1 offset10"><a class="btn btn-info" href="/actividades/calendario/{{next_link.0}}/{{next_link.1}}"><i class="icon-arrow-right"></i>{{next_link.2}}</a></div>
+        </div>
     </div>
 </div>
+<br/>
+<br/>
 
 {# un modal para presentar la actividad/tarea #}
 <div class="modal hide fade" id="modal_ver">

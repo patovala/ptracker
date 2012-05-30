@@ -1,16 +1,18 @@
 #-*- coding: utf-8 -*-
 #--------------------------------------------------------------------------
 #
-#       Colección de formularios para  A C T I V I D A D E S
+#       Colección de formularios para  A C T I V I D A D E S y P R O Y E C T O S
 #
+# (c) Copyright 2012 patovala@pupilabox.net.ec. All Rights Reserved. See LICENSE for details.
 #--------------------------------------------------------------------------
 #  author: Patricio Valarezo (c) patovala@pupilabox.net.ec
 #--------------------------------------------------------------------------
 
 #from django.forms import ModelForm, Textarea, ChoiceField, ModelMultipleChoiceField, Field, TextInput
-from django.forms import ModelForm, Textarea, ChoiceField, Field, TextInput
+from django.forms import ModelForm, Textarea, ChoiceField, Field, TextInput, DateInput, DateField
+from django.forms import extras
 from django.forms.models import inlineformset_factory
-from actividades.models import Actividad, RecursoXActividad
+from actividades.models import Actividad, RecursoXActividad, Proyecto
 from datetime import datetime
 
 MAX_RECURSOS = 4
@@ -74,3 +76,51 @@ class RecursoModelForm(ModelForm):
         self.fields['cant'].widget.attrs['class'] = 'span1'
 
 RecursosFormSet = inlineformset_factory(Actividad, RecursoXActividad, form=RecursoModelForm, can_delete=False, extra=MAX_RECURSOS)
+
+
+class ProyectoForm(ModelForm):
+    """
+    ModelForm para proyectos.
+    """
+    porcentaje = ChoiceField(choices=[(i, "%s %%" % i) for i in range(0, 100, 10)])
+    fecha_inicio = DateField(label=u'fecha inicio', input_formats=['%d/%m/%Y', '%m/%d/%Y', ], required=False, widget=extras.SelectDateWidget(attrs={'class': 'span2'}))
+    fecha_fin = DateField(label=u'fecha fin', input_formats=['%d/%m/%Y', '%m/%d/%Y', ], required=False, widget=extras.SelectDateWidget(attrs={'class': 'span2'}))
+    #fecha_inicio = DateTimeField('fecha_inicio',
+    #    #widget=extras.SelectDateWidget(attrs={'class': 'span2'}),
+    #    required=False,
+    #    label=u'Fecha inicio',
+    #    help_text=u'fecha en la que inicia/inició el proyecto',
+    #    )
+
+    #fecha_fin = DateTimeField('fecha_fin',
+    #    #widget=extras.SelectDateWidget(attrs={'class': 'span2'}),
+    #    required=False,
+    #    label=u'Fecha fin',
+    #    help_text=u'fecha en la que terminará el proyecto',
+    #    )
+
+    class Meta:
+        model = Proyecto
+        exclude = ('empleado')
+        widgets = {
+            'resumen': Textarea(attrs={'cols': 80, 'rows': 2, 'style': 'width:90%', 'class': 'required'}),
+            'nombre': TextInput(attrs={'class': 'required', 'class': 'span4'}),
+        #    'last_name': TextInput(attrs={'data-dojo-type': "dijit.form.TextBox", 'placeholder': "Apellidos del Usuario", 'id': 'id_apellido'}),
+        #    'email': TextInput(attrs={'data-dojo-type': "dijit.form.TextBox", 'placeholder': "Email del Usuario", 'id': 'id_email'}),
+        #    'password': TextInput(attrs={'data-dojo-type': "dijit.form.TextBox", 'placeholder': "Clave del Usuario", 'id': 'id_password'})
+        }
+
+    def __init__(self, *args, **kw):
+        super(ProyectoForm, self).__init__(*args, **kw)
+        self.fields['estado'].widget.attrs['class'] = "span2"  # hack? para formatear bien un campo
+
+    #def clean(self):
+    #    """ recargando este form por problemas con los controles de date """
+    #    cleaned_data = self.cleaned_data
+    #    cleaned_data['fecha_inicio'] = datetime(year=int(self.data['fecha_inicio_year']), month=int(self.data['fecha_inicio_month']), day=int(self.data['fecha_inicio_day']))
+    #    cleaned_data['fecha_fin'] = datetime(year=int(self.data['fecha_fin_year']), month=int(self.data['fecha_fin_month']), day=int(self.data['fecha_fin_day']))
+
+    #    super(ProyectoForm, self).clean()
+    #    import ipdb
+    #    ipdb.set_trace()
+    #    return cleaned_data

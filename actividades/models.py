@@ -78,11 +78,33 @@ class Proyecto(models.Model):
         (u"cancelado", u"cancelado")
     )
 
-    nombre = models.CharField(max_length=1024, null=False)
-    estado = models.CharField(max_length=255, choices=ESTADOS)
-    fecha_inicio = models.DateField('fecha inicio', null=True)  # cuando inicia el proyecto
-    fecha_fin = models.DateField('fecha fin', null=True)
-    porcentaje = models.PositiveIntegerField(default=0)  # el porcentaje de avance (podemos hacerlo en función a los dias transcurridos)
+    nombre = models.CharField(
+            max_length=1024,
+            null=False,
+            help_text=u"El nombre del proyecto/identificador")
+    resumen = models.CharField(
+            max_length=2048,
+            null=False,
+            help_text=u"un resumen del proyecto, objetivos, etc en menos de 300 palabras"
+            )
+    estado = models.CharField(
+            max_length=255,
+            choices=ESTADOS,
+            help_text=u"El estado del proyecto (como se ingrese en ese momento)")
+    fecha_inicio = models.DateField(
+            'Fecha inicio',
+            null=True,
+            blank=True,
+            help_text=u"Fecha Inicio")
+    fecha_fin = models.DateField(
+            'Fecha fin',
+            null=True,
+            blank=True,
+            help_text=u"Fecha Fin")
+    porcentaje = models.PositiveIntegerField(
+            'Porcentaje',
+            default=0,
+            help_text=u"Porcentaje de avance")  # el porcentaje de avance (podemos hacerlo en función a los dias transcurridos)
     empleado = models.ForeignKey('Empleado', related_name="proyectos")
     #actividades = models.OneToMany(Recurso)
 
@@ -98,6 +120,10 @@ class Empleado(models.Model):
     def get_actividades(self):
         """obtener las actividades en un consolidado de este usuario """
         return self.actividades.filter(empleado=self).all()
+
+    def get_proyectos(self):
+        """obtener las actividades en un consolidado de este usuario """
+        return self.proyectos.filter(empleado=self).all()
 
     def __unicode__(self):
         return "%s %s (%s)" % (self.user.first_name, self.user.last_name, self.user.username)

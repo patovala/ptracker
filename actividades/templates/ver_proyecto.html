@@ -1,0 +1,46 @@
+<span class="label label-inverse">{{ proyecto.empleado }} </span>
+<h1> {{ proyecto.nombre }} <a href="/proyectos/editar/{{proyecto.id}}" class="btn btn-warning btn-small" id="btn_ver_pro_editar"><i class="icon-edit"></i> Editar</a></h1> 
+<div class="alert alert-block alert-error fade in" style="display:none">
+        <button data-dismiss="alert" class="close">×</button>
+        <h4 class="alert-heading">Cuidado! Está a punto de eliminar un proyecto!</h4>
+        <p>Al eliminar el proyecto se eliminará sus datos relacionados</p>
+        <p>
+        <a href="/proyectos/eliminar/{{proyecto.id}}" class="btn btn-danger" id="btn_ver_pro_confirm">Eliminar</a> 
+        <a href="#" class="btn" id="btn_ver_pro_cancelar">No eliminar</a>
+        </p>
+</div>
+<div class="well">
+    <div class="row">
+        
+        <span class="span6">{{ proyecto.resumen }}</span>
+        <div class="span3">
+            <dl class="dl-horizontal">
+                <dt>estado:</dt>
+                <dd> {{ proyecto.estado }} </dd>
+                <dt>% avance:</dt>
+                <dd> {{ proyecto.porcentaje }} </dd>
+            </dl>
+        </div>
+        <div class="span3">
+            <dl class="dl-horizontal">
+                <dt>fecha_inicio:</dt> 
+                <dd>{{ proyecto.fecha_inicio|date:"d/m/Y"}}</dd> 
+                <dt>fecha_fin:</dt> 
+                <dd>{{ proyecto.fecha_fin|date:"d/m/Y"}}</dd> 
+            </dl>
+        </div>
+        <span class="span6"><h4>Actividades:</h4>
+            <table class="table">
+                <tr><th>#</th><th>actividad</th><th>fecha_hora</th><th>costo</th></tr>
+                {% for a in proyecto.actividades.all %}
+                <tr>
+                    <td>{{a.id}}</td>
+                    <td>{{a.actividad|truncatewords_html:5}}</td>
+                    <td>{{a.fecha_hora|date:"d/m/Y"}}</td>
+                    <td>{{a.get_costo}}</td>
+                </tr>
+                {% endfor  %}
+            </table>
+        </span>
+    </div>
+</div>

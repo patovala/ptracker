@@ -29,7 +29,7 @@ def actividades_x_empleado(request):
     """ Listar las actividades de un empleado """
     try:
         #empleado = Empleado.objects.get(user__username=username)
-        empleado = request.user.empleado
+        empleado = request.user.profile
     except Empleado.DoesNotExist:
         raise Http404
 
@@ -117,14 +117,40 @@ def calendario(request, year=None, month=None):
     """ Un calendario con las actividades """
     empleado = request.user.profile  # interesante esto, se debe a que el models tiene un static que genera el profile
 
-    if year == None:
+    if year == None and month == None:
         year = date.today().year
         month = date.today().month
+    else:
+        year = int(year)
+        month = int(month)
+
+    prev_month = month - 1
+    prev_year = year
+
+    if prev_month < 1:
+        prev_year = prev_year - 1
+        prev_month = 12
+
+    prev_nombre = date(year=prev_year, month=prev_month, day=1).strftime("%B")
+
+    next_month = month + 1
+    next_year = year
+    if next_month > 12:
+        next_year = next_year + 1
+        next_month = 1
+
+    next_nombre = date(year=next_year, month=next_month, day=1).strftime("%B")
 
     mis_actividades = Actividad.objects.order_by('fecha_hora').filter(fecha_hora__year=year, fecha_hora__month=month)
 
     cal = ActividadCalendar(mis_actividades).formatmonth(year, month)
-    context = {'calendario': mark_safe(cal), 'form_agregar_act': ActividadForm(), 'recursos_formset': RecursosFormSet(), 'empleado': empleado}
+    context = {'calendario': mark_safe(cal),
+                'form_agregar_act': ActividadForm(),
+                'recursos_formset': RecursosFormSet(),
+                'empleado': empleado,
+                'prev_link': (prev_year, prev_month, prev_nombre),
+                'next_link': (next_year, next_month, next_nombre),
+                }
 
     return render_to_response('calendario.html', context_instance=RequestContext(request, context))
 

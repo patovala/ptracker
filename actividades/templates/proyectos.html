@@ -1,0 +1,205 @@
+{% extends 'master.html' %}
+
+{% block css %}
+    .table-bordered tr td {
+        background-color: lightblue;
+        border: 2px solid white;
+        margin: 1px;
+        padding: 1px;
+    }
+
+    table.table-bordered {
+        width: 94%;
+    }
+
+    .bar {
+        position: absolute;
+    }
+
+    td.mon.hoy {
+        border: 1px dashed RoyalBlue;
+    }
+
+{% endblock %}
+
+{% block contenido %}
+<div class="row">
+    <div class="span12">
+        <h1> Lista de Proyectos:</h1> 
+        <h2> {{  empleado.user.first_name }} {{ empleado.user.last_name }}</h2>
+        <i class="icon-user"></i><span class="label label-info"> {{ empleado.user.email }}</span> <span class="badge">{{ empleado.get_proyectos|length }}</span> proyectos
+        <hr/>
+        <div></div>
+        <div class="row">
+            <div class="span12">
+                <table class="table table-stripped">
+                    <tr>
+                        <th>nombre</th>
+                        <th>estado</th>
+                        <th>fecha inicio</th>
+                        <th>fecha fin</th>
+                        <th>% avance</th>
+                    </tr>
+                    {% for p in proyectos %}
+                    <tr>
+                        <td><i class="icon-list-alt"></i> <a href="/proyectos/ver/{{p.id}}" class="verpro">{{p.nombre}}</a></td>
+                        <td>{{p.estado}} </td>
+                        <td>{{p.fecha_inicio}} </td>
+                        <td>{{p.fecha_fin}} </td>
+                        <td>{{p.porcentaje}} </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="span6">
+        <a class="btn btn-primary" href="#" id="btn_agregar_proyecto">Agregar Proyecto</a> 
+    </div>
+</div>
+
+{# un modal para presentar el proyecto #}
+<div class="modal hide fade" id="modal_ver">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>Proyecto</h3>
+    </div>
+    <div class="modal-body">
+        <div id="contenido"></div>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn"  id="btn_ver_pro_cerrar">Cancelar</a>
+        <a href="#" class="btn btn-danger" id="btn_ver_pro_eliminar">Eliminar</a>
+    </div>
+</div>
+
+{# un modal para agregar el proyecto area #}
+<div class="modal hide fade" id="form_agregar_pro">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>Agregar Proyecto</h3>
+    </div>
+    <div class="modal-body">
+         <form class="well form-horizontal" action="/proyectos/crear" method="POST" id="frm_crear_pro">
+            {% csrf_token %}
+            <table>{{ form_agregar_pro.as_table}}</table>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" id="btn_agregar_pro_cerrar">Cerrar</a>
+        <a href="#" class="btn btn-primary" id="btn_agregar_pro_crear">Crear Proyecto</a>
+    </div>
+</div>
+
+{# un modal para editar la proyecto/tarea #}
+<div class="modal hide fade" id="form_editar_pro">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>Editar Proyecto</h3>
+    </div>
+    <div class="modal-body" id="proyecto_edit">
+    </div> 
+
+    <div class="modal-footer">
+        <a href="#" class="btn" id="btn_editar_pro_cerrar">Cerrar</a>
+        <a href="#" class="btn btn-primary" id="btn_editar_pro_doeditar">Editar Proyecto</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+
+<script src="{{ MEDIA_URL}}js/jquery.validate.js"></script> 
+<script src="{{ MEDIA_URL}}js/bootstrap-alert.js"></script> 
+<script type="text/javascript">
+    $(document).ready(function(){
+            // ver las proyectos en un modal 
+        $("a.verpro").click(function(event){
+            event.preventDefault();
+            var url = event.target.href;
+            $.get(url, function(data) {
+                 $('#contenido').html(data);
+
+                 });
+            $("#modal_ver").modal('toggle');
+            }
+        );
+
+        // formulario para agregar proyectos
+        $("a#btn_agregar_proyecto").click(function(event){
+            event.preventDefault();
+            $("#form_agregar_pro").modal('show');
+        });
+
+        $("#btn_agregar_pro_cerrar").click(function(event){
+            $("#form_agregar_pro").modal('hide');
+            $("#frm_crear_pro").validate({
+                errorClass: "alert error-alert",
+                message: "Este campo es obligatorio",
+                }).resetForm();
+        });
+
+        $("#btn_ver_pro_cerrar").click(function(event){
+            $("#modal_ver").modal('hide');
+        });
+
+        $("#btn_ver_pro_eliminar").click(function(event){
+            $(".alert").show();
+        });
+
+        $("#btn_ver_pro_cancelar").live('click',function(event){
+            $(".alert").hide();
+        });
+
+        $("#btn_editar_pro_cerrar").click(function(event){
+            $("#form_editar_pro").modal('hide');
+        });
+
+        // editar la proyecto que se esta viendo
+        $("#btn_ver_pro_editar").live('click',function(event){
+            $("#modal_ver").modal('hide');
+            event.preventDefault();
+            var url = event.target.href;
+            $.get(url, function(data) {
+                 $('#proyecto_edit').html(data);
+
+            });
+            $("#frm_crear_pro")[0].action = url
+            $("#form_editar_pro").modal('show');
+        });
+
+        /* mmm.. I don't know why this is required twise */
+        $("#frm_crear_pro").validate({
+                errorClass: "alert error-alert",
+                messages: {
+                        proyecto: "Este campo es obligatorio",
+                        objetivos: "Se requiere poner objetivos para la proyecto",
+                    },
+                });
+
+        $("#frm_editar_pro").validate({
+                errorClass: "alert error-alert",
+                messages: {
+                        proyecto: "Este campo es obligatorio",
+                        objetivos: "Se requiere poner objetivos para la proyecto",
+                    },
+                });
+
+        $("#btn_agregar_pro_crear").click(function(){
+            if($("#frm_crear_pro").valid()){
+                $("#frm_crear_pro").submit();
+            }
+        });
+
+        $("#btn_editar_pro_doeditar").click(function(){
+            if($("#frm_editar_pro").valid()){
+                $("#frm_editar_pro").submit();
+            }
+        });
+
+ });
+</script>
+{% endblock %}
+
