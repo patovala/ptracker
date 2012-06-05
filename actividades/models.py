@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 
 class Lugar(models.Model):
     """Un lugar es una ciudad, canton, parroquia, que requiera ser mencionado"""
-    nombre = models.CharField(max_length=1024, unique=True)
+    nombre = models.CharField(max_length=255, unique=True)
 
     class Meta:
         verbose_name_plural = u"lugares"
