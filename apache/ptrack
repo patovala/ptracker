@@ -1,44 +1,73 @@
+#<VirtualHost ptrack:80>
+#        ServerAdmin webmaster@localhost
+#
+#        DocumentRoot /home/ptrack/src
+#        <Directory /home/ptrack/src/>
+#                Options Indexes FollowSymLinks MultiViews
+#                AllowOverride None
+#                Order allow,deny
+#                allow from all
+#        </Directory>
+#
+#        ErrorLog ${APACHE_LOG_DIR}/ptrack-error.log
+#
+#        # Possible values include: debug, info, notice, warn, error, crit,
+#        # alert, emerg.
+#        LogLevel warn
+#
+#        CustomLog ${APACHE_LOG_DIR}/ptrack-access.log combined
+#    
+#        #Alias /admin_media/ "/usr/local/lib/python2.7/dist-packages/django/contrib/admin/media/"
+#
+#        <Location />
+#                SetHandler python-program
+#                PythonHandler django.core.handlers.modpython
+#                SetEnv DJANGO_SETTINGS_MODULE settings
+#                PythonOption django.root /
+#                PythonDebug On
+#                PythonPath "['/home/ptrack/src/'] + sys.path"
+#        </Location>
+#        
+#        <Location "/static">
+#            SetHandler None
+#        </Location>
+#
+#        <Location "/media">
+#            SetHandler None
+#        </Location>
+#
+#        <LocationMatch "\.(jpg|gif|png)$">
+#                SetHandler None
+#        </LocationMatch>
+#</VirtualHost>
+
+ #lostquery.com
+
+#Djangos embeded mod_wsgi
 <VirtualHost ptrack:80>
-        ServerAdmin webmaster@localhost
+     ServerName ptrack.gpl.gob.ec
+     ServerAlias www.ptrack.gpl.gob.ec
+     ServerAdmin pvalarezo@agpl.gob.ec
 
-        DocumentRoot /home/ptrack/src
-        <Directory /home/ptrack/src/>
-                Options Indexes FollowSymLinks MultiViews
-                AllowOverride None
-                Order allow,deny
-                allow from all
-        </Directory>
+     # ReWrite URL to WWW
+     RewriteEngine On
+     RewriteCond %{HTTP_HOST} ^www.ptrack.gpl.gob.ec
+     RewriteRule (.*) http://ptrack.gpl.gob.ec$1 [R=301,L]
 
-        ErrorLog ${APACHE_LOG_DIR}/ptrack-error.log
+     # Log Files
+     ErrorLog /var/log/apache2/error-ptrack.log
+     CustomLog /var/log/apache2/access-ptrack.log combined
 
-        # Possible values include: debug, info, notice, warn, error, crit,
-        # alert, emerg.
-        LogLevel warn
+     # prevent django from seting static files
+     DocumentRoot /home/ptrack/src/
+     #Alias /upfiles/ /www/lostquery.com/trunk/forum/upfiles/
+     <Directory /home/ptrack/src/static/>
+         Order allow,deny
+         Allow from all
+     </Directory>
 
-        CustomLog ${APACHE_LOG_DIR}/ptrack-access.log combined
-    
-        #Alias /admin_media/ "/usr/local/lib/python2.7/dist-packages/django/contrib/admin/media/"
+     # Setup mod_wsgi
+     WSGIDaemonProcess ptrack display-name=ptrack user=www-data processes=2 threads=15
+     WSGIScriptAlias / /home/ptrack/src/ptrack.wsgi
 
-        <Location />
-                SetHandler python-program
-                PythonHandler django.core.handlers.modpython
-                SetEnv DJANGO_SETTINGS_MODULE settings
-                PythonOption django.root /
-                PythonDebug On
-                PythonPath "['/home/ptrack/src/'] + sys.path"
-        </Location>
-        
-        <Location "/static">
-            SetHandler None
-        </Location>
-
-        <Location "/media">
-            SetHandler None
-        </Location>
-
-        <LocationMatch "\.(jpg|gif|png)$">
-                SetHandler None
-        </LocationMatch>
 </VirtualHost>
-
-
