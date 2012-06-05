@@ -8,7 +8,7 @@ forms.py - Definitions of newforms-based forms for creating and maintaining
 """
 
 from datetime import datetime
-from StringIO import StringIO
+#from StringIO import StringIO
 
 from django import forms
 from django.forms import extras
@@ -21,11 +21,12 @@ from helpdesk.models import Ticket, Queue, FollowUp, Attachment, IgnoreEmail, Ti
 from helpdesk.settings import HAS_TAG_SUPPORT
 from helpdesk import settings as helpdesk_settings
 
+
 class EditTicketForm(forms.ModelForm):
     class Meta:
         model = Ticket
         exclude = ('created', 'modified', 'status', 'on_hold', 'resolution', 'last_escalation', 'assigned_to')
-    
+
     def __init__(self, *args, **kwargs):
         """
         Add any custom fields that are defined to the form
@@ -61,7 +62,7 @@ class EditTicketForm(forms.ModelForm):
                 fieldclass = forms.ChoiceField
                 choices = field.choices_as_array
                 if field.empty_selection_list:
-                    choices.insert(0, ('','---------' ) )
+                    choices.insert(0, ('', '---------'))
                 instanceargs['choices'] = choices
             elif field.data_type == 'boolean':
                 fieldclass = forms.BooleanField
@@ -79,12 +80,11 @@ class EditTicketForm(forms.ModelForm):
                 fieldclass = forms.IPAddressField
             elif field.data_type == 'slug':
                 fieldclass = forms.SlugField
-            
+
             self.fields['custom_%s' % field.name] = fieldclass(**instanceargs)
 
-
     def save(self, *args, **kwargs):
-        
+
         for field, value in self.cleaned_data.items():
             if field.startswith('custom_'):
                 field_name = field.replace('custom_', '')
@@ -95,7 +95,7 @@ class EditTicketForm(forms.ModelForm):
                     cfv = TicketCustomFieldValue(ticket=self.instance, field=customfield)
                 cfv.value = value
                 cfv.save()
-        
+
         return super(EditTicketForm, self).save(*args, **kwargs)
 
 
@@ -104,9 +104,11 @@ class EditFollowUpForm(forms.ModelForm):
         "Filter not openned tickets here."
         super(EditFollowUpForm, self).__init__(*args, **kwargs)
         self.fields["ticket"].queryset = Ticket.objects.filter(status__in=(Ticket.OPEN_STATUS, Ticket.REOPENED_STATUS))
+
     class Meta:
         model = FollowUp
         exclude = ('date', 'user',)
+
 
 class TicketForm(forms.Form):
     queue = forms.ChoiceField(
@@ -118,14 +120,14 @@ class TicketForm(forms.Form):
     title = forms.CharField(
         max_length=100,
         required=True,
-        widget=forms.TextInput(attrs={'size':'60'}),
+        widget=forms.TextInput(attrs={'size': '60'}),
         label=_('Summary of the problem'),
         )
 
     submitter_email = forms.EmailField(
         required=False,
         label=_('Submitter E-Mail Address'),
-        widget=forms.TextInput(attrs={'size':'60'}),
+        widget=forms.TextInput(attrs={'size': '60'}),
         help_text=_('This e-mail address will receive copies of all public '
             'updates to this ticket.'),
         )
@@ -155,6 +157,7 @@ class TicketForm(forms.Form):
 
     due_date = forms.DateTimeField(
         widget=extras.SelectDateWidget,
+        input_formats=['%d/%m/%Y', '%m/%d/%Y', ],
         required=False,
         label=_('Due on'),
         )
@@ -230,7 +233,7 @@ class TicketForm(forms.Form):
                 fieldclass = forms.IPAddressField
             elif field.data_type == 'slug':
                 fieldclass = forms.SlugField
-            
+
             self.fields['custom_%s' % field.name] = fieldclass(**instanceargs)
 
 
@@ -261,7 +264,7 @@ class TicketForm(forms.Form):
             except User.DoesNotExist:
                 t.assigned_to = None
         t.save()
-        
+
         for field, value in self.cleaned_data.items():
             if field.startswith('custom_'):
                 field_name = field.replace('custom_', '')
@@ -284,7 +287,7 @@ class TicketForm(forms.Form):
             }
 
         f.save()
-        
+
         files = []
         if self.cleaned_data['attachment']:
             import mimetypes
@@ -298,15 +301,15 @@ class TicketForm(forms.Form):
                 )
             a.file.save(file.name, file, save=False)
             a.save()
-            
+
             if file.size < getattr(settings, 'MAX_EMAIL_ATTACHMENT_SIZE', 512000):
-                # Only files smaller than 512kb (or as defined in 
+                # Only files smaller than 512kb (or as defined in
                 # settings.MAX_EMAIL_ATTACHMENT_SIZE) are sent via email.
                 files.append(a.file.path)
 
         context = safe_template_context(t)
         context['comment'] = f.comment
-        
+
         messages_sent_to = []
 
         if t.submitter_email:
@@ -449,7 +452,7 @@ class PublicTicketForm(forms.Form):
                 fieldclass = forms.IPAddressField
             elif field.data_type == 'slug':
                 fieldclass = forms.SlugField
-            
+
             self.fields['custom_%s' % field.name] = fieldclass(**instanceargs)
 
     def save(self):
@@ -504,9 +507,9 @@ class PublicTicketForm(forms.Form):
                 )
             a.file.save(file.name, file, save=False)
             a.save()
-            
+
             if file.size < getattr(settings, 'MAX_EMAIL_ATTACHMENT_SIZE', 512000):
-                # Only files smaller than 512kb (or as defined in 
+                # Only files smaller than 512kb (or as defined in
                 # settings.MAX_EMAIL_ATTACHMENT_SIZE) are sent via email.
                 files.append(a.file.path)
 
@@ -598,7 +601,7 @@ class TicketCCForm(forms.ModelForm):
             users = User.objects.filter(is_active=True, is_staff=True).order_by('username')
         else:
             users = User.objects.filter(is_active=True).order_by('username')
-        self.fields['user'].queryset = users 
+        self.fields['user'].queryset = users
     class Meta:
         model = TicketCC
         exclude = ('ticket',)

@@ -82,7 +82,7 @@ class Proyecto(models.Model):
             max_length=1024,
             null=False,
             help_text=u"El nombre del proyecto/identificador")
-    resumen = models.CharField(
+    resumen = models.TextField(
             max_length=2048,
             null=False,
             help_text=u"un resumen del proyecto, objetivos, etc en menos de 300 palabras"
@@ -104,6 +104,7 @@ class Proyecto(models.Model):
     porcentaje = models.PositiveIntegerField(
             'Porcentaje',
             default=0,
+            choices=[(p, u"%s %%" % p) for p in range(0, 110, 10)],
             help_text=u"Porcentaje de avance")  # el porcentaje de avance (podemos hacerlo en función a los dias transcurridos)
     empleado = models.ForeignKey('Empleado', related_name="proyectos")
     #actividades = models.OneToMany(Recurso)
