@@ -66,8 +66,7 @@ def crear(request):
             new_proyecto.save()
 
         else:
-            import ipdb
-            ipdb.set_trace()
+            messages.error(request, 'error: %s' % f.errors)
 
     # en el peor de los casos
     return HttpResponseRedirect("/proyectos/")

@@ -68,7 +68,7 @@
           <div class="span8 offset2">
           <div class="messages">
               {% for message in messages %}
-              <div {% if message.tags %} class="alert alert-{{message.tags|lower}}"{% endif %}>{{ message }}</div>
+              <div {% if message.tags %} class="alert alert-{{message.tags|lower}}"{% endif %}>{{ message|safe }}</div>
               {% endfor %}
           </div>
           </div>
