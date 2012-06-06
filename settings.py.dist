@@ -161,3 +161,6 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 LOGIN_REDIRECT_URL = '/actividades/'
 LOGIN_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+# locale para la generación del calendario html
+LOCALE = "es_EC"

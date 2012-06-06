@@ -23,6 +23,8 @@ from django.contrib import messages
 from calendar import LocaleHTMLCalendar
 from datetime import date, datetime
 from itertools import groupby
+# settings
+import settings
 
 
 def actividades_x_empleado(request):
@@ -47,7 +49,7 @@ def actividades_x_empleado(request):
 class ActividadCalendar(LocaleHTMLCalendar):
 
     def __init__(self, actividades):
-        super(ActividadCalendar, self).__init__(locale="es_EC")
+        super(ActividadCalendar, self).__init__(locale=settings.LOCALE)
         self.actividades = self.group_by_day(actividades)
 
     def formatday(self, day, weekday):
