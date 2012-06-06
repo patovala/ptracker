@@ -20,7 +20,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 # calendario stuff
-from calendar import HTMLCalendar
+from calendar import LocaleHTMLCalendar
 from datetime import date, datetime
 from itertools import groupby
 
@@ -44,10 +44,10 @@ def actividades_x_empleado(request):
 
 
 # Una clase que maneja calendarios
-class ActividadCalendar(HTMLCalendar):
+class ActividadCalendar(LocaleHTMLCalendar):
 
     def __init__(self, actividades):
-        super(ActividadCalendar, self).__init__()
+        super(ActividadCalendar, self).__init__(locale="es_EC")
         self.actividades = self.group_by_day(actividades)
 
     def formatday(self, day, weekday):
