@@ -40,6 +40,8 @@ urlpatterns = patterns('',
     (r'^proyectos/$', 'actividades.proyectos.proyectos_x_empleado'),
     (r'^proyectos/crear$', 'actividades.proyectos.crear'),
     (r'^proyectos/ver/(\d+)$', 'actividades.proyectos.ver'),
+    (r'^proyectos/eliminar/(\d+)$', 'actividades.proyectos.eliminar'),
+    (r'^proyectos/editar/(\d+)$', 'actividades.proyectos.editar'),
     # arreglando para poder despachar js y css por media
     (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     (r'^$', login, {'template_name': 'login.html'}),

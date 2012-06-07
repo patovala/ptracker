@@ -1,0 +1,6 @@
+    <form class="well form-horizontal" action="/proyectos/editar/{{proyecto.id}}" method="POST" id="frm_edit_pro">
+       {% csrf_token %}
+       <table>
+           {{form_editar_pro.as_table}} 
+       </table>
+   </form>

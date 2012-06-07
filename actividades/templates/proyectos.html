@@ -179,14 +179,6 @@
                     },
                 });
 
-        $("#frm_editar_pro").validate({
-                errorClass: "alert error-alert",
-                messages: {
-                        proyecto: "Este campo es obligatorio",
-                        objetivos: "Se requiere poner objetivos para la proyecto",
-                    },
-                });
-
         $("#btn_agregar_pro_crear").click(function(){
             if($("#frm_crear_pro").valid()){
                 $("#frm_crear_pro").submit();
@@ -194,9 +186,7 @@
         });
 
         $("#btn_editar_pro_doeditar").click(function(){
-            if($("#frm_editar_pro").valid()){
-                $("#frm_editar_pro").submit();
-            }
+            $("#frm_edit_pro").submit();
         });
 
  });

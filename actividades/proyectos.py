@@ -14,7 +14,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
 #from django.utils.safestring import mark_safe  # << marca una cadena como segura para ser representada
 from django.template.context import RequestContext
-from actividades.forms import ProyectoForm, RecursosFormSet
+from actividades.forms import ProyectoForm
 #auth stuff
 from django.contrib.auth.decorators import login_required
 #mensajes
@@ -79,32 +79,25 @@ def eliminar(request, id_proyecto):
     proyecto = Proyecto.objects.get(pk=id_proyecto)
     proyecto.delete()
     # en el peor de los casos
-    return HttpResponseRedirect("/proyectos/calendario")
+    return HttpResponseRedirect("/proyectos/")
 
 
 @login_required
 def editar(request, id_proyecto):
-    """ ver una proyecto via ajax """
+    """ editar una proyecto via ajax """
     proyecto = Proyecto.objects.get(pk=id_proyecto)
     empleado = request.user.profile  # interesante esto, se debe a que el models tiene un static que genera el profile
-    f = ProyectoForm(proyecto.fecha_hora, instance=proyecto)
-    formset = RecursosFormSet(instance=proyecto)
+    f = ProyectoForm(instance=proyecto)
 
     if request.method == 'POST':
-        f = ProyectoForm(proyecto.fecha_hora, request.POST, instance=proyecto)
-        recursos_formset = RecursosFormSet(request.POST, instance=proyecto)
+        f = ProyectoForm(request.POST, instance=proyecto)
 
-        if f.is_valid() and recursos_formset.is_valid():
-            #proyecto = f.save(commit=False)
-            #new_proyecto.fecha_hora = f.cleaned_data['fecha_hora']
-            #new_proyecto.empleado = empleado
-            # grabar el formset
+        if f.is_valid():
             proyecto.save()
-            recursos_formset.save()
-            messages.success(request, 'Proyecto Actualizada.')
+            messages.success(request, 'Proyecto Actualizado')
 
         # en el peor de los casos
-        return HttpResponseRedirect("/proyectos/calendario")
+        return HttpResponseRedirect("/proyectos/")
 
-    context = {'form_agregar_act': f, 'recursos_formset': formset, 'empleado': empleado, 'proyecto': proyecto}
-    return render_to_response('editar.html', context_instance=RequestContext(request, context))
+    context = {'form_editar_pro': f, 'empleado': empleado, 'proyecto': proyecto}
+    return render_to_response('editar_proyecto.html', context_instance=RequestContext(request, context))
