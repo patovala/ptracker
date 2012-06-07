@@ -1,4 +1,4 @@
-from actividades.models import Lugar, Recurso, Actividad, Proyecto, Empleado
+from actividades.models import Lugar, Recurso, Actividad, Proyecto, Empleado, RecursoXActividad
 
 from django.contrib import admin
 
@@ -27,8 +27,22 @@ class ProyectoAdmin(admin.ModelAdmin):
             return Proyecto.objects.all()
         return Proyecto.objects.filter(empleado=request.user.profile)
 
+
+class ChoiceInlineRecurso(admin.TabularInline):
+    model = RecursoXActividad
+
+
+class ActividadAdmin(admin.ModelAdmin):
+    inlines = [ChoiceInlineRecurso]
+
+    def queryset(self, request):
+        if request.user.is_superuser:
+            return Actividad.objects.all()
+        return Actividad.objects.filter(empleado=request.user.profile)
+
+
 admin.site.register(Lugar)
 admin.site.register(Recurso)
-admin.site.register(Actividad)
+admin.site.register(Actividad, ActividadAdmin)
 admin.site.register(Proyecto, ProyectoAdmin)
 admin.site.register(Empleado)

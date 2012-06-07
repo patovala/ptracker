@@ -40,6 +40,9 @@ class RecursoXActividad(models.Model):
     recurso = models.ForeignKey(Recurso)
     actividad = models.ForeignKey('Actividad', related_name="recursos")
 
+    def __unicode__(self):
+        return "%s (%s)" % (self.cant, self.recurso.recurso)
+
 
 class Actividad(models.Model):
     """Una actividad es una tarea/componente de un proyecto"""
