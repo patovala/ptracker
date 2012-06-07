@@ -143,7 +143,7 @@ def calendario(request, year=None, month=None):
 
     next_nombre = date(year=next_year, month=next_month, day=1).strftime("%B")
 
-    mis_actividades = Actividad.objects.order_by('fecha_hora').filter(fecha_hora__year=year, fecha_hora__month=month)
+    mis_actividades = Actividad.objects.order_by('fecha_hora').filter(fecha_hora__year=year, fecha_hora__month=month, empleado=empleado)
 
     cal = ActividadCalendar(mis_actividades).formatmonth(year, month)
     context = {'calendario': mark_safe(cal),
@@ -170,7 +170,11 @@ def ver(request, id_actividad):
 def crear(request, dia, mes, anio):
     """ crear una actividad via post """
     fecha = datetime(year=int(anio), month=int(mes), day=int(dia))
-    empleado = Empleado.objects.get(pk=1)
+    #empleado = Empleado.objects.get(pk=1)
+    try:
+        empleado = request.user.profile
+    except Empleado.DoesNotExist:
+        raise Http404
 
     if request.method == 'POST':
         f = ActividadForm(fecha, request.POST)
@@ -183,6 +187,8 @@ def crear(request, dia, mes, anio):
             new_actividad.save()
             recursos_formset = RecursosFormSet(request.POST, instance=new_actividad)
             recursos_formset.save()
+        else:
+            messages.error(request, f.errors)
 
     # en el peor de los casos
     return HttpResponseRedirect("/actividades/calendario")
