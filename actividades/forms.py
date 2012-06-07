@@ -9,7 +9,7 @@
 #--------------------------------------------------------------------------
 
 #from django.forms import ModelForm, Textarea, ChoiceField, ModelMultipleChoiceField, Field, TextInput
-from django.forms import ModelForm, Textarea, ChoiceField, Field, TextInput, DateInput, DateField
+from django.forms import ModelForm, Textarea, ChoiceField, Field, TextInput, DateField
 from django.forms import extras
 from django.forms.models import inlineformset_factory
 from actividades.models import Actividad, RecursoXActividad, Proyecto
@@ -49,11 +49,14 @@ class ActividadForm(ModelForm):
 
     # Overriding __init__ here allows us to provide initial
     # data for 'toppings' field
-    def __init__(self, fecha_hora=None, *args, **kwargs):
+    def __init__(self, fecha_hora=None, empleado=None, *args, **kwargs):
         super(ActividadForm, self).__init__(*args, **kwargs)
 
         if fecha_hora:
             self.fh = fecha_hora
+
+        if empleado:
+            self.fields['proyecto'].queryset = Proyecto.objects.filter(empleado=empleado)
 
     def clean(self):
         """ recargando esta vaina"""

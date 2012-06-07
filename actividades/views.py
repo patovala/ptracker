@@ -146,8 +146,10 @@ def calendario(request, year=None, month=None):
     mis_actividades = Actividad.objects.order_by('fecha_hora').filter(fecha_hora__year=year, fecha_hora__month=month, empleado=empleado)
 
     cal = ActividadCalendar(mis_actividades).formatmonth(year, month)
+    form_agregar_act = ActividadForm(empleado=empleado)
+
     context = {'calendario': mark_safe(cal),
-                'form_agregar_act': ActividadForm(),
+                'form_agregar_act': form_agregar_act,
                 'recursos_formset': RecursosFormSet(),
                 'empleado': empleado,
                 'prev_link': (prev_year, prev_month, prev_nombre),
@@ -177,7 +179,7 @@ def crear(request, dia, mes, anio):
         raise Http404
 
     if request.method == 'POST':
-        f = ActividadForm(fecha, request.POST)
+        f = ActividadForm(fecha, empleado, request.POST)
 
         if f.is_valid():
             new_actividad = f.save(commit=False)
@@ -209,11 +211,11 @@ def editar(request, id_actividad):
     """ ver una actividad via ajax """
     actividad = Actividad.objects.get(pk=id_actividad)
     empleado = request.user.profile  # interesante esto, se debe a que el models tiene un static que genera el profile
-    f = ActividadForm(actividad.fecha_hora, instance=actividad)
+    f = ActividadForm(actividad.fecha_hora, empleado, instance=actividad)
     formset = RecursosFormSet(instance=actividad)
 
     if request.method == 'POST':
-        f = ActividadForm(actividad.fecha_hora, request.POST, instance=actividad)
+        f = ActividadForm(actividad.fecha_hora, empleado, request.POST, instance=actividad)
         recursos_formset = RecursosFormSet(request.POST, instance=actividad)
 
         if f.is_valid() and recursos_formset.is_valid():

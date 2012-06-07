@@ -13,8 +13,22 @@ from django.contrib import admin
 #admin.site.register(Docente, DocenteAdmin)
 #admin.site.register(Egresado, EgresadoAdmin)
 #admin.site.register(SegTesParam)
+
+
+class ChoiceInlineActividad(admin.TabularInline):
+    model = Actividad
+
+
+class ProyectoAdmin(admin.ModelAdmin):
+    inlines = [ChoiceInlineActividad]
+
+    def queryset(self, request):
+        if request.user.is_superuser:
+            return Proyecto.objects.all()
+        return Proyecto.objects.filter(empleado=request.user.profile)
+
 admin.site.register(Lugar)
 admin.site.register(Recurso)
 admin.site.register(Actividad)
-admin.site.register(Proyecto)
+admin.site.register(Proyecto, ProyectoAdmin)
 admin.site.register(Empleado)
