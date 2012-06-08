@@ -188,7 +188,8 @@ def crear(request, dia, mes, anio):
             # grabar el formset
             new_actividad.save()
             recursos_formset = RecursosFormSet(request.POST, instance=new_actividad)
-            recursos_formset.save()
+            if recursos_formset.is_valid():
+                recursos_formset.save()
         else:
             messages.error(request, f.errors)
 
