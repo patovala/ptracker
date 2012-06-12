@@ -1,0 +1,7 @@
+*.pyc
+dist
+django_helpdesk.egg-info
+docs/html/*
+docs/doctrees/*
+.project
+.pydevproject
