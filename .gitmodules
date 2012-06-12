@@ -1,0 +1,3 @@
+[submodule "helpdesk"]
+	path = helpdesk
+	url = https://github.com/rossp/django-helpdesk.git
